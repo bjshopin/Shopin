@@ -1,0 +1,5 @@
+net\shopin\utils\SerializeUtil.class
+net\shopin\utils\JxRedisTemplate.class
+net\shopin\Application.class
+net\shopin\utils\RedisConfig.class
+net\shopin\utils\RedisConfig$1.class
