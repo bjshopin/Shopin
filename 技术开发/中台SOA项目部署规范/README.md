@@ -583,6 +583,7 @@
 </div>
 
  - <font color="red">注意</font>
+ 
 ```
 注意: mpsi-[module]-service-impl不纳入mpsi-parent的聚合项目中,每一个服务实现都是单独的war项目 ,
 但是它需要依赖于mpsi-parent，原因在于mpsi-parent继承与mpsi-dependencies,
