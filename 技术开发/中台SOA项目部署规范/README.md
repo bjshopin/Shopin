@@ -536,8 +536,10 @@
 ##### 1.2.1.3 项目组成结构
 
 <div align=center><img src="https://github.com/bjshopin/Shopin/blob/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%AD%E5%8F%B0SOA%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E8%A7%84%E8%8C%83/img/3.jpg"/>
+</div>
 
  - <font color="red">注意</font>
+ 
 ```
 注意: mpsi-[module]-service-impl不纳入mpsi-parent的聚合项目中,每一个服务实现都是单独的war项目 ,
 但是它需要依赖于mpsi-parent，原因在于mpsi-parent继承与mpsi-dependencies,
