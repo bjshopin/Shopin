@@ -257,7 +257,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.8.RELEASE</version>
+        <version>1.5.12.RELEASE</version>
         <!--
         默认值为../pom.xml
         查找顺序：relativePath元素中的地址–本地仓库–远程仓库
@@ -626,7 +626,7 @@
 	<dependency>  
 	       <groupId>org.springframework.boot</groupId>  
 	       <artifactId>spring-boot-starter-data-redis</artifactId>  
-	       <version>1.5.8.RELEASE</version>  
+	       <version>1.5.12.RELEASE</version>  
 	</dependency>  
 ```
 ###### 1.2.2.1.2 配置信息
