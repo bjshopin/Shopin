@@ -56,8 +56,16 @@
             * [3.2.4 MQ组件配置](#324-mq组件配置)
             * [3.2.5 线程池配置](#325-线程池配置)
     * [4. 发布与维护](#4-发布与维护)
-       * [4.1 快照版发布](#41-快照版发布)
-       * [4.2 正式版发布](#42-正式版发布)
+       * [4.1 版本控制](#41-版本控制)
+         * [4.1.1 快照版发布](#411-快照版发布)
+         * [4.1.2 正式版发布](#412-正式版发布)
+       * [4.2 服务发布规约](#42-服务发布规约)
+         * [4.2.1 服务命名](#421-服务命名)
+           * [4.2.1.1 接口命名](#4211-接口命名)
+           * [4.2.1.2 实现类命名](#4212-实现类命名)
+         * [4.2.2 服务版本及群组](#422-服务版本及群组)
+           * [4.2.2.1 服务版本](#4221-服务版本)
+           * [4.2.2.2 群组](#4222-群组)
        * [4.3 Git仓库代码规约](#43-git仓库代码规约)
             * [4.3.1 代码上传规约](#431-代码上传规约)
               * [4.3.1.1 .gitignore文件的设置](#4311-.gitignore文件的设置)
@@ -257,7 +265,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.12.RELEASE</version>
+        <version>1.5.8.RELEASE</version>
         <!--
         默认值为../pom.xml
         查找顺序：relativePath元素中的地址–本地仓库–远程仓库
@@ -623,11 +631,11 @@
 ##### 1.2.2.1 SpringBoot集成RedisTemplate
 ###### 1.2.2.1.1 Maven依赖
 ```
-	<dependency>  
-	       <groupId>org.springframework.boot</groupId>  
-	       <artifactId>spring-boot-starter-data-redis</artifactId>  
-	       <version>1.5.12.RELEASE</version>  
-	</dependency>  
+    <dependency>  
+           <groupId>org.springframework.boot</groupId>  
+           <artifactId>spring-boot-starter-data-redis</artifactId>  
+           <version>1.5.8.RELEASE</version>  
+    </dependency>  
 ```
 ###### 1.2.2.1.2 配置信息
  - 在application.properties中配置:
@@ -650,13 +658,13 @@
   也就是说无论多少个Task,都是一个线程串行执行;
 ```
 ```
-  	串行Job添加类注解  
-	@Component  
-	@EnableScheduling  
-	方法注解  
-	@Scheduled(fixedRate = 3 * 1000)  
-	或者 
-	@Scheduled(cron = 表达式) 
+    串行Job添加类注解  
+    @Component  
+    @EnableScheduling  
+    方法注解  
+    @Scheduled(fixedRate = 3 * 1000)  
+    或者 
+    @Scheduled(cron = 表达式) 
 
 ```
 ###### 1.2.2.2.2 并行执行
@@ -664,18 +672,18 @@
  SpringBoot中Job支持并行执行(多个任务同时执行),需手动配置
 ```
 ```
- 	并行Job添加类注解  
-	@Component  
-	@EnableScheduling  
-	@EnableAsync(mode = AdviceMode.PROXY, proxyTargetClass = false,  
-	        order = Ordered.HIGHEST_PRECEDENCE  
-	)  
-	方法注解  
-	@Scheduled(fixedRate = 3 * 1000)  
-	@Async  
-	或者  
-	@Scheduled(cron = 表达式)   
-	@Async 
+    并行Job添加类注解  
+    @Component  
+    @EnableScheduling  
+    @EnableAsync(mode = AdviceMode.PROXY, proxyTargetClass = false,  
+            order = Ordered.HIGHEST_PRECEDENCE  
+    )  
+    方法注解  
+    @Scheduled(fixedRate = 3 * 1000)  
+    @Async  
+    或者  
+    @Scheduled(cron = 表达式)   
+    @Async 
 ```
 ###### 1.2.2.2.3 实例Demo
 [SpringBoot整合Schedule定时任务](https://github.com/553899811/NewBie-Plan/tree/master/SpringBoot/springboot-schedule)
@@ -931,86 +939,86 @@
  - 服务生产者
 ```
    [1] application.properties
-   	
-   	//应用名称  
-	spring.dubbo.application.name=inventory-query-provider  
-	//注册中心地址 [单机或集群模式] 
-	spring.dubbo.registry.address=zookeeper://172.16.103.145:2181  
-	//传输协议  
-	spring.dubbo.protocol.name=dubbo  
-	//传输端口  
-	spring.dubbo.protocol.port=20881 
+    
+    //应用名称  
+    spring.dubbo.application.name=inventory-query-provider  
+    //注册中心地址 [单机或集群模式] 
+    spring.dubbo.registry.address=zookeeper://172.16.103.145:2181  
+    //传输协议  
+    spring.dubbo.protocol.name=dubbo  
+    //传输端口  
+    spring.dubbo.protocol.port=20881 
 
-	
-   [2]	Service实现层注解改动
+    
+   [2]  Service实现层注解改动
     @Service为Dubbo注解注入，不是Spring的!!!!!!
-  	
-  	@Service(version = "1.0.0", delay = -1)  
-	public class SysRecordServiceImpl implements ISysRecordService {  
-	  
-	    @Autowired  
-	    SysRecordMapper sysRecordMapper;  
-	  
-	    @Override  
-	    public List<SysRecord> selectRecord() {  
-	        return sysRecordMapper.selectRecord();  
-	    }  
-	}  
-	
-	[3].启动类添加@DubboComponentScan注解扫描
+    
+    @Service(version = "1.0.0", delay = -1)  
+    public class SysRecordServiceImpl implements ISysRecordService {  
+      
+        @Autowired  
+        SysRecordMapper sysRecordMapper;  
+      
+        @Override  
+        public List<SysRecord> selectRecord() {  
+            return sysRecordMapper.selectRecord();  
+        }  
+    }  
+    
+    [3].启动类添加@DubboComponentScan注解扫描
 
-	@SpringBootApplication  
-	@DubboComponentScan("net.shopin.service.impl")  
-	public class InventoryQueryProviderApplication extends SpringBootServletInitializer {  
-	  
-	    @Override  
-	    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
-	        return application.sources(InventoryQueryProviderApplication.class);  
-	    }  
-	  
-	    public static void main(String[] args) {  
-	        SpringApplication.run(InventoryQueryProviderApplication.class, args);  
-	    }  
-	} 
+    @SpringBootApplication  
+    @DubboComponentScan("net.shopin.service.impl")  
+    public class InventoryQueryProviderApplication extends SpringBootServletInitializer {  
+      
+        @Override  
+        protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
+            return application.sources(InventoryQueryProviderApplication.class);  
+        }  
+      
+        public static void main(String[] args) {  
+            SpringApplication.run(InventoryQueryProviderApplication.class, args);  
+        }  
+    } 
 
 ```
 
  - 服务消费者
 ```
    [1]application.properties
-   	# Springboot-dubbo 消费者配置信息  
-	spring.dubbo.application.name=ssd-web  
-	spring.dubbo.registry.address=zookeeper://172.16.103.145:2181  
-	spring.dubbo.protocol.name=dubbo  
-	spring.dubbo.protocol.port=20880  
+    # Springboot-dubbo 消费者配置信息  
+    spring.dubbo.application.name=ssd-web  
+    spring.dubbo.registry.address=zookeeper://172.16.103.145:2181  
+    spring.dubbo.protocol.name=dubbo  
+    spring.dubbo.protocol.port=20880  
    [2]Controller层注入DubboService(@Reference)
-   	@RestController  
-	public class SysRecordController {  
-	  
-	    @Reference(version = "1.0.0", check = false)  
-	    ISysRecordService sysRecordService;  
-	  
-	    @RequestMapping(value = "selectRecord")  
-	    public List<SysRecord> selectRecord() {  
-	        return sysRecordService.selectRecord();  
-	    }  
-	} 
+    @RestController  
+    public class SysRecordController {  
+      
+        @Reference(version = "1.0.0", check = false)  
+        ISysRecordService sysRecordService;  
+      
+        @RequestMapping(value = "selectRecord")  
+        public List<SysRecord> selectRecord() {  
+            return sysRecordService.selectRecord();  
+        }  
+    } 
    [3]启动类添加@DubboComponentScan注解扫描
    扫描Controller包
    
-   	@SpringBootApplication  
-	@DubboComponentScan(basePackages = "net.shopin.controller")  
-	public class ConsumerApplication extends SpringBootServletInitializer {  
-	
-	    @Override  
-	    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
-	        return application.sources(ConsumerApplication.class);  
-	    }  
-	  
-	    public static void main(String[] args) {  
-	        SpringApplication.run(ConsumerApplication.class, args);  
-	    }  
-	}  
+    @SpringBootApplication  
+    @DubboComponentScan(basePackages = "net.shopin.controller")  
+    public class ConsumerApplication extends SpringBootServletInitializer {  
+    
+        @Override  
+        protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
+            return application.sources(ConsumerApplication.class);  
+        }  
+      
+        public static void main(String[] args) {  
+            SpringApplication.run(ConsumerApplication.class, args);  
+        }  
+    }  
 
 ```
 ###### 1.2.2.4.3 文件描述
@@ -1217,16 +1225,118 @@ spring.datasource.connectionProperties=druid.stat.mergeSql=true;druid.stat.slowS
 #### 3.2.5 线程池配置
 
 ## 4 发布与维护
-### 4.1 快照版发布
+### 4.1 版本控制
+#### 4.1.1 快照版发布
 ```
-  快照版用于测试环境,快照版本均为X.Y.Z-SNAPSHOT 
-  ,(字母Z后面为中横线-,不是. 否则上传私服会出现错误)X迭代即代表大版本升级或者框架升级,Z迭代即代表需求更新,功能添加,Z满十进一。
+  快照版用于测试环境,快照版本均为X.Y.Z.SNAPSHOT 
+  ,X迭代即代表大版本升级或者框架升级,Z迭代即代表需求更新,功能添加,Z满十进一;
 ```
-### 4.2 正式版发布
+#### 4.1.2 正式版发布
 ```
   正式版本用于生产环境, 正式版本均为X.Y.Z.RELEASE 
-  ,X迭代即代表大版本升级或者框架升级,Z迭代即代表需求更新，功能添加，Z满十进一.
+  ,X迭代即代表大版本升级或者框架升级,Z迭代即代表需求更新，功能添加，Z满十进一;
 ```
+### 4.2 服务发布规约
+#### 4.2.1 服务命名
+##### 4.2.1.1 接口命名
+ - 接口命名(大写字母I开头):
+```
+   I + 业务模块全称 + Query/Update +Service
+   例如:
+       IProductDetailQueryService 物料查询服务接口
+       IOldInventoryQueryService 旧盘点查询服务接口
+
+```
+##### 4.2.1.2 实现类命名
+ - 实现类命名:
+```
+   由于包括存在新旧系统同时存在的情况
+   (old/new) + 业务模块全称 + Query/Update + Service +Impl
+   
+   例如: OldInventoryQueryServiceImpl 旧盘点查询服务提供方
+```
+### 4.2.2 服务版本及群组
+#### 4.2.2.1 服务版本
+```
+  服务版本格式为version = ”A.B.C”,例如
+  @Service(version = "1.0.0")
+```
+<table frame="hsides" rules="groups" cellspacing=0 cellpadding=0>
+<!-- 表头部分 -->
+<thead align=center style="font-weight:bolder; background-color:#cccccc">
+     <tr>
+          <td>字母</td>
+          <td>标识含义(迭代)</td>
+     </tr>
+</thead>
+
+<tbody>
+    <tr>
+        <td>C</td>
+        <td>参数校验逻辑修改</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td>业务逻辑修改</td>
+    </tr>
+    <tr>
+        <td>A</td>
+        <td>版本升级,重构</td>
+    </tr>
+</tbody>
+</table>
+
+#### 4.2.2.2 群组
+```
+   群组版本格式为 group =”A-B”,例如
+   @Service(version="1.0.0",group = "inventory-q")
+```
+
+<table frame="hsides" rules="groups" cellspacing=0 cellpadding=0>
+<!-- 表头部分 -->
+<thead align=center style="font-weight:bolder; background-color:#cccccc">
+     <tr>
+          <td>字母</td>
+          <td>标识含义(迭代)</td>
+     </tr>
+</thead>
+
+<tbody>
+    <tr>
+        <td>A</td>
+        <td>业务模块</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td>q/u</td>
+    </tr>
+
+</tbody>
+</table>
+
+- q/u含义:(代表着业务模块的查询或更新功能)
+
+<table frame="hsides" rules="groups" cellspacing=0 cellpadding=0>
+<!-- 表头部分 -->
+<thead align=center style="font-weight:bolder; background-color:#cccccc">
+     <tr>
+          <td>字母</td>
+          <td>标识含义(迭代)</td>
+     </tr>
+</thead>
+
+<tbody>
+    <tr>
+        <td>q</td>
+        <td>query</td>
+    </tr>
+    <tr>
+        <td>u</td>
+        <td>update</td>
+    </tr>
+</tbody>
+</table>
+
 ### 4.3 Git仓库代码规约
 #### 4.3.1 代码上传规约
 ```
