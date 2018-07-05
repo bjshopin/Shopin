@@ -45,6 +45,7 @@
             * [2.1.2 Eclipse安装教程](#212-eclipse安装教程)
             * [2.1.3 MyEclipse安装教程](#213-myeclipse安装教程)
        * [2.2 上品开发编码规范](#22-上品开发编码规范)
+       * [2.3 RPC-API设计与分析](#23-rpc-api设计与分析)
     * [3. 环境配置](#3-环境配置)
        * [3.1 版本兼容说明](#31-版本兼容说明)
        * [3.2 组件配置](#32-组件配置)
@@ -52,7 +53,8 @@
               * [3.2.1.1 单数据源配置](#3211-单数据源配置)
               * [3.2.1.2 多数据源配置](#3212-多数据源配置)
             * [3.2.2 日志组件及配置](#322-日志组件及配置)
-            * [3.2.3 缓存组件配置](#323-缓存组件配置)
+            * [3.2.3 本地Maven配置](#323-本地maven配置) 
+            * [3.2.4 缓存组件配置](#323-缓存组件配置)
             * [3.2.4 MQ组件配置](#324-mq组件配置)
             * [3.2.5 线程池配置](#325-线程池配置)
     * [4. 发布与维护](#4-发布与维护)
@@ -631,11 +633,11 @@
 ##### 1.2.2.1 SpringBoot集成RedisTemplate
 ###### 1.2.2.1.1 Maven依赖
 ```
-    <dependency>  
-           <groupId>org.springframework.boot</groupId>  
-           <artifactId>spring-boot-starter-data-redis</artifactId>  
-           <version>1.5.8.RELEASE</version>  
-    </dependency>  
+  <dependency>  
+         <groupId>org.springframework.boot</groupId>  
+         <artifactId>spring-boot-starter-data-redis</artifactId>  
+         <version>1.5.8.RELEASE</version>  
+  </dependency>  
 ```
 ###### 1.2.2.1.2 配置信息
  - 在application.properties中配置:
@@ -659,12 +661,12 @@
 ```
 ```
     串行Job添加类注解  
-    @Component  
-    @EnableScheduling  
-    方法注解  
-    @Scheduled(fixedRate = 3 * 1000)  
-    或者 
-    @Scheduled(cron = 表达式) 
+  @Component  
+  @EnableScheduling  
+  方法注解  
+  @Scheduled(fixedRate = 3 * 1000)  
+  或者 
+  @Scheduled(cron = 表达式) 
 
 ```
 ###### 1.2.2.2.2 并行执行
@@ -672,18 +674,18 @@
  SpringBoot中Job支持并行执行(多个任务同时执行),需手动配置
 ```
 ```
-    并行Job添加类注解  
-    @Component  
-    @EnableScheduling  
-    @EnableAsync(mode = AdviceMode.PROXY, proxyTargetClass = false,  
-            order = Ordered.HIGHEST_PRECEDENCE  
-    )  
-    方法注解  
-    @Scheduled(fixedRate = 3 * 1000)  
-    @Async  
-    或者  
-    @Scheduled(cron = 表达式)   
-    @Async 
+  并行Job添加类注解  
+  @Component  
+  @EnableScheduling  
+  @EnableAsync(mode = AdviceMode.PROXY, proxyTargetClass = false,  
+          order = Ordered.HIGHEST_PRECEDENCE  
+  )  
+  方法注解  
+  @Scheduled(fixedRate = 3 * 1000)  
+  @Async  
+  或者  
+  @Scheduled(cron = 表达式)   
+  @Async 
 ```
 ###### 1.2.2.2.3 实例Demo
 [SpringBoot整合Schedule定时任务](https://github.com/553899811/NewBie-Plan/tree/master/SpringBoot/springboot-schedule)
@@ -941,45 +943,45 @@
    [1] application.properties
     
     //应用名称  
-    spring.dubbo.application.name=inventory-query-provider  
-    //注册中心地址 [单机或集群模式] 
-    spring.dubbo.registry.address=zookeeper://172.16.103.145:2181  
-    //传输协议  
-    spring.dubbo.protocol.name=dubbo  
-    //传输端口  
-    spring.dubbo.protocol.port=20881 
+  spring.dubbo.application.name=inventory-query-provider  
+  //注册中心地址 [单机或集群模式] 
+  spring.dubbo.registry.address=zookeeper://172.16.103.145:2181  
+  //传输协议  
+  spring.dubbo.protocol.name=dubbo  
+  //传输端口  
+  spring.dubbo.protocol.port=20881 
 
-    
+  
    [2]  Service实现层注解改动
     @Service为Dubbo注解注入，不是Spring的!!!!!!
     
     @Service(version = "1.0.0", delay = -1)  
-    public class SysRecordServiceImpl implements ISysRecordService {  
-      
-        @Autowired  
-        SysRecordMapper sysRecordMapper;  
-      
-        @Override  
-        public List<SysRecord> selectRecord() {  
-            return sysRecordMapper.selectRecord();  
-        }  
-    }  
+  public class SysRecordServiceImpl implements ISysRecordService {  
     
-    [3].启动类添加@DubboComponentScan注解扫描
+      @Autowired  
+      SysRecordMapper sysRecordMapper;  
+    
+      @Override  
+      public List<SysRecord> selectRecord() {  
+          return sysRecordMapper.selectRecord();  
+      }  
+  }  
+  
+  [3].启动类添加@DubboComponentScan注解扫描
 
-    @SpringBootApplication  
-    @DubboComponentScan("net.shopin.service.impl")  
-    public class InventoryQueryProviderApplication extends SpringBootServletInitializer {  
-      
-        @Override  
-        protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
-            return application.sources(InventoryQueryProviderApplication.class);  
-        }  
-      
-        public static void main(String[] args) {  
-            SpringApplication.run(InventoryQueryProviderApplication.class, args);  
-        }  
-    } 
+  @SpringBootApplication  
+  @DubboComponentScan("net.shopin.service.impl")  
+  public class InventoryQueryProviderApplication extends SpringBootServletInitializer {  
+    
+      @Override  
+      protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
+          return application.sources(InventoryQueryProviderApplication.class);  
+      }  
+    
+      public static void main(String[] args) {  
+          SpringApplication.run(InventoryQueryProviderApplication.class, args);  
+      }  
+  } 
 
 ```
 
@@ -987,38 +989,38 @@
 ```
    [1]application.properties
     # Springboot-dubbo 消费者配置信息  
-    spring.dubbo.application.name=ssd-web  
-    spring.dubbo.registry.address=zookeeper://172.16.103.145:2181  
-    spring.dubbo.protocol.name=dubbo  
-    spring.dubbo.protocol.port=20880  
+  spring.dubbo.application.name=ssd-web  
+  spring.dubbo.registry.address=zookeeper://172.16.103.145:2181  
+  spring.dubbo.protocol.name=dubbo  
+  spring.dubbo.protocol.port=20880  
    [2]Controller层注入DubboService(@Reference)
     @RestController  
-    public class SysRecordController {  
-      
-        @Reference(version = "1.0.0", check = false)  
-        ISysRecordService sysRecordService;  
-      
-        @RequestMapping(value = "selectRecord")  
-        public List<SysRecord> selectRecord() {  
-            return sysRecordService.selectRecord();  
-        }  
-    } 
+  public class SysRecordController {  
+    
+      @Reference(version = "1.0.0", check = false)  
+      ISysRecordService sysRecordService;  
+    
+      @RequestMapping(value = "selectRecord")  
+      public List<SysRecord> selectRecord() {  
+          return sysRecordService.selectRecord();  
+      }  
+  } 
    [3]启动类添加@DubboComponentScan注解扫描
    扫描Controller包
    
     @SpringBootApplication  
-    @DubboComponentScan(basePackages = "net.shopin.controller")  
-    public class ConsumerApplication extends SpringBootServletInitializer {  
+  @DubboComponentScan(basePackages = "net.shopin.controller")  
+  public class ConsumerApplication extends SpringBootServletInitializer {  
+  
+      @Override  
+      protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
+          return application.sources(ConsumerApplication.class);  
+      }  
     
-        @Override  
-        protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
-            return application.sources(ConsumerApplication.class);  
-        }  
-      
-        public static void main(String[] args) {  
-            SpringApplication.run(ConsumerApplication.class, args);  
-        }  
-    }  
+      public static void main(String[] args) {  
+          SpringApplication.run(ConsumerApplication.class, args);  
+      }  
+  }  
 
 ```
 ###### 1.2.2.4.3 文件描述
@@ -1054,6 +1056,173 @@
 ```
 [上品开发编码规范](https://github.com/bjshopin/Shopin/tree/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%8A%E5%93%81%E5%BC%80%E5%8F%91%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83)
 
+### 2.3 RPC-API设计与分析
+ - 以SSD对接PAD接口分析为例
+```
+  接口：
+1.实体销售，选择商品  -------------------------------------------------------OK
+原有接口：pad/getStock
+SOA接口：net.shopin.prostock.service.ISsdProStockService.getProStock
+传入参数：ProStockPadParamsVO
+返回参数：Map<String, Object>
+    成功：{"success":"true","result":paginator} <p>
+    失败：{"success":"false","code":"N0001","reason":"barCode is null"} 
+    失败：{"success":"false","code":"N0002","reason":"stocknum is null"} 
+    失败：{"success":"false","code":"N0003","reason":"other reason cause the empty result"} 
+    失败：{"success":"false","code":"N0004","reason":"parameter is null"} 
+    失败：{"success":"false","code":"N9000","reason":"exception:"+exception} 
+    
+2.根据供应商ID和门店查询商品品牌信息  ok
+原有接口：pad/getBrandInfo
+SOA接口：net.shopin.brand.service.ISsdBrandService.getBrandInfoBySupplyShop
+传入参数：net.shopin.matetiel.entity.SsdSupplyBrandShop
+返回参数：List<SsdBrand>
+
+3.PAD模糊搜索款号  --------------------------------------------------------OK
+原有接口：pad/getProSku
+SOA接口：net.shopin.product.service.ISsdProductService.getProductSku
+传入参数：net.shopin.pad.param.ProStockPadParamsVO
+返回参数：List<VSsdProductStockPrice>
+
+4.根据productSku和brandSid查询款色或者单一商品--------------------------------------OK
+原有接口：ssdBrandSku
+SOA接口：net.shopin.prodetail.service.ISsdProductDetailService.getProColBySkuAndBrand
+传入参数： String productSku 款号
+      Long brandSid 品牌ID
+返回参数：List<ProColorReBack>
+注：传入参数要做非空校验
+
+5.根据品类ID和品牌ID以及文件编号查询尺码
+原有接口：/pad/getStan
+SOA接口：net.shopin.stan.service.ISsdStanService.getStan----------------------------------------------------OK
+传入参数：SsdStanDict   注意：categorySid与brandSid为必传参数，categorySid需要去除空格
+返回参数：List<SsdStanDict>
+
+
+6.查询商品条码------------------------------------------------------------OK
+原有接口：pad/getBarCode
+SOA接口：net.shopin.prostock.service.ISsdProStockService.getProBarCode
+传入参数：ProStockPadParamsVO
+返回参数：Paginator（PadProStockVO）
+
+7.根据款号和品牌返回所有的物料商品--------------------------------------------------------------OK
+原有接口：ssdGetDetails
+SOA接口：net.shopin.prodetail.service.ISsdProductDetailService.getProDetailBySkuAndBrand
+传入参数： String productSku 款号
+      Long brandSid 品牌ID
+返回参数：List<SsdJCODetailVO>
+注：传入参数要做非空校验
+
+8.根据供应商 门店 以及品牌 查询 库存总数 品牌 可传，可不传------------------------------------------------OK
+原有接口：pad/getStockSum
+SOA接口：net.shopin.stock.service.ISsdStockService.getStockSum
+传入参数：net.shopin.pad.param.PadGetStokSumParm
+返回参数：Integer : 库存总数
+注：品牌可为空，其余参数不可为空！
+
+9.跨店查询----------------------------------------------------------------------------------------OK
+原有接口：pad/getShopStock
+SOA接口：net.shopin.prostock.service.impl.SsdProStockServiceImpl.getShopStock
+传入参数：net.shopin.pad.param.ProStockPadParamsVO
+返回参数：net.shopin.base.bean.Paginator（PadProStockVO）
+
+10.查询未拍照商品明细信息  拍照接口1---------------------------------------------------------------PAD数据解析问题
+原有接口：photo/prodetail
+SOA接口：net.shopin.prodetail.service.ISsdProductDetailService.queryUnPhotoSku
+传入参数： net.shopin.photo.param.PhotoProDetailParam
+      String  currentPage  当前页
+      String  pageSize  每页数量
+返回参数：net.shopin.photo.entiy.PhotoProductListPage
+
+11.根据供应商和ERP品牌ID获取该供应商品牌下的一级品类详情--------------------------------------------OK
+原有接口：pad/getFlCategory
+SOA接口：net.shopin.category.service.SsdCategoryService.getFirstCategoryBySupplyAndBrand
+传入参数：net.shopin.matetiel.entity.SsdSupplyBrandCategory
+返回参数：SsdCategory
+注：参数中必须检验供应商编码与ERP品牌ID不为空，才可以传递
+
+12.根据物料，门店，供应商，库位，返回对应的库存数
+原有接口：pad/stockNum
+SOA接口：net.shopin.stock.service.ISsdStockService.getStockSumByParam----------------------------返回为Null
+传入参数：net.shopin.stock.entity.SsdStock
+返回参数：Integer
+注：传入参数中物料（productDetailSid）、供应商（supplySid）、门店（shopSid）要做非空校验
+
+13.PAD查询现价记录---------------------------------------------------------------------------OK
+原有接口：pad/getCurrentPriceLog
+SOA接口：net.shopin.currentprice.service.ISsdCurrentPriceQueryService.getCurrentPriceLogForPad
+传入参数：net.shopin.pad.param.ProStockPadParamsVO
+返回参数：net.shopin.base.bean.Paginator(CurrentPriceLogVO)
+
+14.创建盘点单以及要盘点明细商品------------------------------------------------------OK
+原有接口：inventory/addInventoryVoucher
+SOA接口：net.shopin.inventory.service.ISsdInventoryQueryService.createInventoryVoucher
+传入参数：net.shopin.inventory.param.SsdInventoryBaseParam
+返回参数：Map<String, Object> 
+    成功：{"success":true,"obj":SsdInventoryVoucher}
+    失败：{"success":false,"msg":"......"}
+    
+15.根据初盘还是复盘查询界面选项，查询在有效期之内的盘点单柜位号，并且判断当前盘点是否属于本pad创建，还是协助设备创建的盘点单-------------
+原有接口：inventory/selectInventoryRAreaRecordByType
+SOA接口：net.shopin.pad.reback.SsdInventoryRAreaRecord   selectInventoryRAreaRecordByType
+传入参数：net.shopin.inventory.param.SsdInventoryRAreaRecordParam
+返回参数：net.shopin.pad.reback.SsdInventoryRAreaRecord（net.shopin.inventory.entity.SsdInventoryRArea）
+
+16.查看当前盘点单区域号不能重复---------------------------------------------------OK
+原有接口：/inventory/isExistAreaNo
+SOA接口：net.shopin.inventory.service.ISsdInventoryQueryService.isExistAreaNo
+传入参数：net.shopin.inventory.param.SsdInventoryBaseParam
+返回参数：net.shopin.base.bean.SsdSorEBaseResult
+
+17.删除盘点标记（旧盘点系统）
+原有接口：delStockMark
+SOA接口：net.shopin.inventory.old.service.ISsdOldInventoryQueryService.InventoryMarkdelete
+传入参数：String stockSid, String shopSid, String supplySid （与原接口参数一致）
+返回参数：net.shopin.base.bean.SsdSorEBaseResult
+
+18.根据物料 门店，供应商 获得 原价 、现价、促销价
+原有接口：pad/getPrice
+SOA接口：net.shopin.price.service.ISsdPriceQueryService.padGetPrice
+传入参数：net.shopin.pad.param.PadBaseParam
+返回参数：net.shopin.pad.reback.SsdPriceRePad
+
+19.采购信息查询
+原有接口：/ssdGR008
+SOA接口：net.shopin.prodetail.service.SsdProductDetailService.GR008-------------------------------------------OK
+参数：GR008Param
+返回参数：Map<String, Object>
+  成功：{"success":"true","result":list<MaterialVO>,"totalPage":999} 
+  失败：{"success":"false","reason":"Record not found!"} 
+  失败：{"success":"false"} 
+注：shopSid与supplySid为必填参数
+
+20.无订单记录查询
+原有接口：pad/getStockChangeData
+SOA接口：net.shopin.stock.service.ISsdStockChangeServicce.getStockChangeDataByParam
+参数：net.shopin.stock.entity.SsdStockChangeRecordAndProDetailsVo
+返回参数：net.shopin.base.bean.SsdBaseResult<SsdStockChangeRecordAndProDetails>
+
+21.增加盘点标记（旧盘点系统）
+原有接口：/addStockMark
+SOA接口：net.shopin.inventory.old.service.ISsdOldInventoryQueryService.InventoryMarkInit
+参数：net.shopin.inventory.param.SsdInventoryMarkParam
+返回参数：net.shopin.base.bean.SsdSorEBaseResult
+
+22.查询所有已创建盘点单
+原有接口：selectInventoryVoucherList
+SOA接口：net.shopin.inventory.old.service.ISsdOldInventoryQueryService.selectInventoryVoucherList
+参数：net.shopin.inventory.param.SsdInventoryBaseParam
+返回参数：Map<String, Object> 
+    成功：{"success":true,"list":[{},{}],"isLocalPad":true}
+         {"success":true,"list":[{},{}],"isLocalPad":false}
+    失败：{"success":false}
+23.根据盘点单号查询盘点单
+原有接口：selectInventoryVoucherInfoBySid
+SOA接口：net.shopin.inventory.service.impl.SsdInventoryVoucherServiceImpl#selectInventoryVoucherInfoBySid
+参数：Long 盘点单号
+返回： net.shopin.inventory.entity.SsdInventoryVoucher
+
+```
 ## 3. 环境配置
 ### 3.1 版本兼容说明
 
@@ -1135,7 +1304,15 @@ spring.datasource.connectionProperties=druid.stat.mergeSql=true;druid.stat.slowS
 ```
 ##### 3.2.1.2 多数据源配置
 ```
- TODO
+   TODO 测试
+```
+ - SpringBoot 整合 atomikos
+```
+    <!--添加分布式事务管理-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jta-atomikos</artifactId>
+        </dependency>
 ```
 #### 3.2.2 日志组件及配置
  - log4j2.xml配置
@@ -1217,18 +1394,61 @@ spring.datasource.connectionProperties=druid.stat.mergeSql=true;druid.stat.slowS
     </Loggers>
 </Configuration>
 ```
+#### 3.2.3 本地Maven配置
+ - 添加 profiles 节点
+```
+<profiles>
+<profile>
+    <!-- 这个id要和activeProfile里的id一样 --> 
+    <id>nexus</id>
+    <repositories>
+       <repository>  
+            <id>nexus</id>  
+            <url>http://172.16.103.19:1081/nexus/content/groups/public/</url>  
+            <releases>  
+             <enabled>true</enabled>  
+            </releases>  
+            <snapshots>  
+             <enabled>true</enabled>  
+              </snapshots>  
+           </repository> 
+      <repository>
+          <id>central</id>
+        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+      </repository>
+    </repositories>
+    <pluginRepositories>
+      <pluginRepository>
+        <id>central</id>
+        <url>http://central</url>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+      </pluginRepository>
+    </pluginRepositories>
+  </profile>
+</profiles>
+```
+#### 3.2.4 缓存组件配置
 
-#### 3.2.3 缓存组件配置
+#### 3.2.5 MQ组件配置
 
-#### 3.2.4 MQ组件配置
-
-#### 3.2.5 线程池配置
+#### 3.2.6 线程池配置
 
 ## 4 发布与维护
 ### 4.1 版本控制
 #### 4.1.1 快照版发布
 ```
-  快照版用于测试环境,快照版本均为X.Y.Z.SNAPSHOT 
+  快照版用于测试环境,快照版本均为X.Y.Z-SNAPSHOT 
   ,X迭代即代表大版本升级或者框架升级,Z迭代即代表需求更新,功能添加,Z满十进一;
 ```
 #### 4.1.2 正式版发布
