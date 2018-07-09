@@ -267,7 +267,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.8.RELEASE</version>
+        <version>1.5.12.RELEASE</version>
         <!--
         默认值为../pom.xml
         查找顺序：relativePath元素中的地址–本地仓库–远程仓库
@@ -302,10 +302,8 @@
         <mysql.connector.java.version>5.1.41</mysql.connector.java.version>
         <lombok.version>1.16.18</lombok.version>
     </properties>
-
+    
     <dependencyManagement>
-
-
         <dependencies>
             <!--引入mybatis与Springboot整合[持久化层引用]-->
             <dependency>
@@ -432,7 +430,6 @@
 </project>
 
 ```
-
 ##### 1.2.1.2 mpsi-parent
 ###### 1.2.1.2.1 作用
 ```
