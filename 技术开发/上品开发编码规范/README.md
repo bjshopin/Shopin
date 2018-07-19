@@ -177,7 +177,7 @@
    正例: 
       public static Boolean valueOf(boolean b) {
          return (b ? Boolean.TRUE : Boolean.FALSE);
-	  }
+    }
 ```
 
 ## 2.格式规约
@@ -187,8 +187,13 @@
 ```
   在IDE中设置tab长度为4个空格(避免未设置之前一个tab在不同的编辑器中长度不同引起代码冲突);
 ```
+
+![](https://github.com/bjshopin/Shopin/blob/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%AD%E5%8F%B0SOA%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E8%A7%84%E8%8C%83/img/Tab%E9%94%AE%E8%AE%BE%E7%BD%AE%E4%B8%BA4%E4%B8%AA%E7%A9%BA%E6%A0%BC.png?raw=true)
+
  - 【必须】<font color="red">IDE的text file encoding编码格式设置为 UTF-8</font>
+  ![](https://raw.githubusercontent.com/bjshopin/Shopin/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%AD%E5%8F%B0SOA%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E8%A7%84%E8%8C%83/img/File-Encoding.png)
  - 【必须】<font color="red">IDE中文件的换行符使用Unix格式,严禁使用Window格式</font>
+ ![](https://github.com/bjshopin/Shopin/blob/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%AD%E5%8F%B0SOA%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E8%A7%84%E8%8C%83/img/Line-Separator.png?raw=true)
  - 【必须】<font color="red">文档化</font>
 ```
    必须用javadoc来为类生成文档。不仅因为它是标准，这也是被各种java编译器都认可的方法。
@@ -320,8 +325,8 @@
     }
 
 ```
- - IDE配置说明
-![Idea配置方法注释说明](https://blog.csdn.net/u014044812/article/details/76577479)
+ - IDE配置说明</br>
+[Idea配置自定义方法注释说明](https://blog.csdn.net/u014044812/article/details/76577479)
 ####  4.2.1 单行注释
  - 【必须】方法内部单行注释,在被注释语句上方另起一行，使用//注释。方法内部多行注释使用/* */注释，注意和代码对齐。
 #### 4.2.2 多行注释
