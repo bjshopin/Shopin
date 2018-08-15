@@ -148,10 +148,10 @@
    而impl是要结合Jenkins部署,因此impl要单独独立出来;
 ```
   - impl结构图
-<div align=center><img src="https://github.com/bjshopin/Shopin/blob/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%AD%E5%8F%B0SOA%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E8%A7%84%E8%8C%83/img/2.png"/>
+<div align=center><img src="img/2.png"/>
 </div>
   - 后台组件图(聚合项目)
-<div align=center><img src="https://github.com/bjshopin/Shopin/blob/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%AD%E5%8F%B0SOA%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E8%A7%84%E8%8C%83/img/1.png"/>
+<div align=center><img src="img/1.png"/>
 </div>
 
 #### 1.1.2 项目命名
@@ -1047,11 +1047,11 @@
 
 [MyEclipse 安装P3C教程](https://jingyan.baidu.com/article/72ee561a72cd74e16138df9e.html)
 
-### 2.2 上品开发编码规范
+### 2.2 上品科技研发编码规范
 ```
-《上品开发编码规范》结合《Alibaba Java开发规范》正式版以及上品具体业务撰写而成，详情可在《上品开发编码规范》中可见。
+《上品科技开发编码规范》结合《Alibaba Java开发规范》正式版以及上品具体业务撰写而成，详情可在《上品科技研发编码规范》中可见。
 ```
-[上品开发编码规范](https://github.com/bjshopin/Shopin/tree/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%8A%E5%93%81%E5%BC%80%E5%8F%91%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83)
+[上品科技研发编码规范](https://github.com/bjshopin/Shopin/tree/master/%E6%8A%80%E6%9C%AF%E5%BC%80%E5%8F%91/%E4%B8%8A%E5%93%81%E5%BC%80%E5%8F%91%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83)
 
 ### 2.3 RPC-API设计与分析
  - 以SSD对接PAD接口分析为例
